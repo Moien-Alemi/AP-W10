@@ -38,6 +38,7 @@ public class CustomLinkedList<T> implements LinkedList<T>{
         tail.next = new Node(o);
         tail.next.prev = tail;
         tail = tail.next;
+        size++;
         return true;
     }
 
@@ -71,18 +72,33 @@ public class CustomLinkedList<T> implements LinkedList<T>{
     @Override
     public void addFirst(T t) {
         Node<T> newNode = new Node<>(t);
-        head.prev = newNode;
-        newNode.next = head;
-        head = newNode;
+        if(size == 0){
+            head = newNode;
+            tail = newNode;
+        }
+        else {
+            head.prev = newNode;
+            newNode.next = head;
+            head = newNode;
+        }
+        size++;
     }
 
     @Override
     public void addLast(T t) {
         if(t == null)
             throw new NullPointerException();
-        tail.next = new Node(t);
-        tail.next.prev = tail;
-        tail = tail.next;
+        Node<T> newNode = new Node<>(t);
+        if(size == 0){
+            head = newNode;
+            tail = newNode;
+        }
+        else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
     }
 
     @Override
@@ -100,7 +116,7 @@ public class CustomLinkedList<T> implements LinkedList<T>{
             head.next.prev = null;
             head = head.next;
         }
-
+        size--;
         return t;
     }
 
@@ -119,7 +135,7 @@ public class CustomLinkedList<T> implements LinkedList<T>{
             tail.prev.next = null;
             tail = tail.prev;
         }
-
+        size--;
         return t;
     }
 
@@ -141,6 +157,7 @@ public class CustomLinkedList<T> implements LinkedList<T>{
     public void clear() {
         head = null;
         tail = null;
+        size = 0;
     }
 
     @Override
