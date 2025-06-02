@@ -1,47 +1,57 @@
 package management;
 
+import datastructures.maps.CustomHashMap;
 import library.Book;
 import library.Member;
 
+import java.util.NoSuchElementException;
+
 public class BookManager {
-    // TODO: Define a data structure that stores ISBNs and their matching Book objects
+    private CustomHashMap<String, Book> books;
 
     private MemberManager memberManager;
 
     public BookManager(MemberManager memberManager) {
-        // TODO: Initialize your data structure here
+        books = new CustomHashMap<>();
         this.memberManager = memberManager;
     }
 
     public void addBook(Book book) {
-        // TODO: Add the book and its ISBN to your data structure
+        books.put(book.getIsbn(), book);
     }
 
     public Book getBookByIsbn(String isbn) {
-        // TODO
-        return null;
+        return books.get(isbn);
     }
 
     public boolean isBookAvailable(String isbn) {
-        // TODO
-        return false;
+        return (books.get(isbn).isAvailable());
     }
 
     public void setBookAvailability(String isbn, boolean available) {
-        // TODO
+        books.get(isbn).setAvailable(available);
     }
 
     public void addToWaitlist(String isbn, String memberId) {
-        // TODO
+        Book book = books.get(isbn);
+        Member member = memberManager.getMember(memberId);
+        if(book != null && member !=null)
+            book.addToWaitlist(member);
     }
 
     public Member getNextFromWaitlist(String isbn) {
-        // TODO
-        return null;
+        Book book = books.get(isbn);
+        if (book != null) {
+            return books.get(isbn).getNextInWaitlist();
+        }
+        throw new NoSuchElementException("This book doesn't exist in the library");
     }
 
     public boolean hasWaitlist(String isbn) {
-        // TODO
-        return false;
+        Book book = books.get(isbn);
+        if (book == null) {
+            throw new NoSuchElementException("This book doesn't exist in the library");
+        }
+        return books.get(isbn).hasWaitlist();
     }
 }
